@@ -1,7 +1,7 @@
 const {Router} = require('express');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const config = require('config');
+const jwt = require('jsonwebtoken');
 const {check, validationResult} = require('express-validator')
 const User = require('../models/User');
 const router = Router();
@@ -9,7 +9,7 @@ const router = Router();
 
 // api/auth
 router.post(
-    '/reqister',
+    '/register',
     [
         check('email', 'Incorrect email').isEmail(),
         check('password', 'Password must contain at least 6 symbols')
@@ -25,6 +25,7 @@ router.post(
                 })
             }
             const {email, password} = req.body;
+
             const candidate = await User.findOne({email: email});
             if (candidate) {
                 return res.status(400).json({message: `User with this email: ${email} already exist`})
@@ -41,7 +42,8 @@ router.post(
         }
     })
 // api/login
-router.post('/login',
+router.post(
+    '/login',
     [
         check('email', 'Enter valid email').normalizeEmail().isEmail(),
         check('password', 'Enter valid password').exists(),  // password must exist
