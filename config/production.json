@@ -1,0 +1,6 @@
+{
+    "port": 5000,
+    "jwtSecret": "maksimmern",
+    "mongoUri":"mongodb+srv://max:220887zZ@cluster0.lqlus.mongodb.net/MERN?retryWrites=true&w=majority",
+    "baseUrl": "http://localhost:5000"
+}
