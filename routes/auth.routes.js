@@ -1,5 +1,5 @@
 const {Router} = require('express');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs')
 const config = require('config');
 const jwt = require('jsonwebtoken');
 const {check, validationResult} = require('express-validator')
@@ -26,7 +26,7 @@ router.post(
             }
             const {email, password} = req.body;
 
-            const candidate = await User.findOne({email: email});
+            const candidate = await User.findOne({email});
             if (candidate) {
                 return res.status(400).json({message: `User with this email: ${email} already exist`})
             }
@@ -46,7 +46,7 @@ router.post(
     '/login',
     [
         check('email', 'Enter valid email').normalizeEmail().isEmail(),
-        check('password', 'Enter valid password').exists(),  // password must exist
+        check('password', 'Enter valid password').exists()  // password must exist
     ],
     async (req, res) => {
         try {
@@ -65,7 +65,7 @@ router.post(
             }
 
             const isMatch = await bcrypt.compare(password, user.password);
-            if (isMatch) {
+            if (!isMatch) {
                 return res.status(400).json({message: 'Invalid password, try again'});
             }
 
