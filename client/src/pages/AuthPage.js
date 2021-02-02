@@ -1,8 +1,10 @@
-import {React, useState, useEffect} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {useHttp} from "../hooks/http.hook";
 import {useMessage} from "../hooks/message.hook";
+import {AuthContext} from "../context/AuthContext";
 
 export const AuthPage = () => {
+    const auth = useContext(AuthContext); // imports variables from context
     const message = useMessage()
     const {loading, request, error, clearError} = useHttp()
     const [form, setForm] = useState({
@@ -14,6 +16,10 @@ export const AuthPage = () => {
         clearError()
     }, [error, message, clearError]);
 
+    useEffect(() => {
+        window.M.updateTextFields()
+    },[])
+
     const changeHandler = event => {
         setForm({...form, [event.target.name]: event.target.value})
     }
@@ -23,15 +29,13 @@ export const AuthPage = () => {
             const data = await request('/api/auth/register', 'POST', {...form});
             message(data.message)
         } catch (e) {
-
         }
     }
     const loginHandler = async () => {
         try {
             const data = await request('/api/auth/login', 'POST', {...form});
-            message(data.message)
+            auth.login(data.token, data.userId);
         } catch (e) {
-
         }
     }
 
@@ -50,6 +54,7 @@ export const AuthPage = () => {
                                     type="text"
                                     name="email"
                                     className='yellow-input'
+                                    value={form.email}
                                     onChange={changeHandler}
                                 />
                                 <label htmlFor="email">Email</label>
@@ -60,6 +65,7 @@ export const AuthPage = () => {
                                     id="password"
                                     type="password"
                                     name="password"
+                                    value={form.password}
                                     className='yellow-input'
                                     onChange={changeHandler}
                                 />

@@ -5,10 +5,11 @@ const mongoose = require('mongoose');
 const app = express();
 
 app.use(express.json({extended:true}));
-
 app.use('/api/auth', require('./routes/auth.routes')); //specifying routes
+app.use('/api/link', require('./routes/link.routes'))
+app.use('/t', require('./routes/redirect.routes'))
 
-const PORT = config.get('port') || 5001; // constant from config/default.json
+const PORT = config.get('port') || 5000; // constant from config/default.json
 
 async function start() {
     try {
